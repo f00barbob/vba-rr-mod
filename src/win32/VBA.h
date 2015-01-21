@@ -85,6 +85,7 @@ public:
 	bool	  useBiosFile;
 	bool	  skipBiosFile;
 	CString	  biosFileName;
+	CString   luaFileName; // f00barbob's mods.
 	bool	  allowLeftRight;
 	bool	  autofireAccountForLag;
 	bool	  nextframeAccountForLag;

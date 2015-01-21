@@ -4,6 +4,15 @@
 #include <mmsystem.h>
 #include <cassert>
 
+#ifdef _DEBUG
+#include <Windows.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <io.h>
+#include <iostream>
+#include <fstream>
+#endif
+
 #include "resource.h"
 #include "VBA.h"
 #include "AVIWrite.h"
@@ -66,6 +75,41 @@ extern "C" bool cpu_mmx;
 #endif
 
 // nowhere good to put them to
+
+static void OpenConsole()
+{
+    int outHandle, errHandle, inHandle;
+    FILE *outFile, *errFile, *inFile;
+    AllocConsole();
+    CONSOLE_SCREEN_BUFFER_INFO coninfo;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &coninfo);
+    coninfo.dwSize.Y = 9999;
+    SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), coninfo.dwSize);
+ 
+    outHandle = _open_osfhandle((long)GetStdHandle(STD_OUTPUT_HANDLE), _O_TEXT);
+    errHandle = _open_osfhandle((long)GetStdHandle(STD_ERROR_HANDLE),_O_TEXT);
+    inHandle = _open_osfhandle((long)GetStdHandle(STD_INPUT_HANDLE),_O_TEXT );
+ 
+    outFile = _fdopen(outHandle, "w" );
+    errFile = _fdopen(errHandle, "w");
+    inFile =  _fdopen(inHandle, "r");
+ 
+    *stdout = *outFile;
+    *stderr = *errFile;
+    *stdin = *inFile;
+ 
+    setvbuf( stdout, NULL, _IONBF, 0 );
+    setvbuf( stderr, NULL, _IONBF, 0 );
+    setvbuf( stdin, NULL, _IONBF, 0 );
+ 
+    std::ios::sync_with_stdio();
+ 
+}
+
+static void KillConsole()
+{
+	FreeConsole();
+}
 
 void DrawTextMessages(u8 *dest, int pitch, int left, int bottom)
 {
@@ -473,6 +517,7 @@ VBA::~VBA()
 
 BOOL VBA::InitInstance()
 {
+	OpenConsole();
 	AfxEnableControlContainer();
 	// Standard initialization
 	// If you are not using these features and wish to reduce the size
@@ -566,6 +611,20 @@ BOOL VBA::InitInstance()
 
 					//systemLoadBIOS();
 				}
+				else if (_stricmp(argv[i], "-lua") == 0)
+				{
+					if (i + 1 >= argc || argv[i + 1][0] == '-')
+						goto invalidArgument;
+					luaFileName = argv[++i];
+					printf("Trying to load lua %s",luaFileName);
+					winCorrectPath(luaFileName);
+				}
+#ifdef _DEBUG
+				else if (_stricmp(argv[i], "-noconsole") == 0)
+				{
+					KillConsole();
+				}
+#endif
 				else if (_stricmp(argv[i], "-frameskip") == 0)
 				{
 					if (i + 1 >= argc || argv[i + 1][0] == '-')
@@ -695,6 +754,10 @@ invalidArgument:
 					            "-h \t\t\t displays this help\n"
 					            "-rom filename \t\t opens the given ROM\n"
 					            "-bios filename \t\t use the given GBA BIOS\n"
+								"-lua filename \t\t load a Lua script at startup\n"
+#ifdef _DEBUG
+								"-noconsole\t\t disable debugging console -______-\n"
+#endif
 					            "-play filename val \t\t plays the given VBM movie (val: 1 = read-only, 0 = editable)\n"
 					            "-outputWAV filename \t outputs WAV audio to the given file\n"
 					            "-outputAVI \t\t outputs an AVI (you are prompted for location and codec)\n"
@@ -738,7 +801,7 @@ invalidArgument:
 		}
 		free(argv);
 	}
-
+	VBALoadLuaCode(luaFileName);
 	return TRUE;
 }
 
@@ -1479,6 +1542,7 @@ bool VBA::initDisplay()
 			return false;
 		}
 	}
+
 	changingVideoSize = false;
 	return true;
 }
