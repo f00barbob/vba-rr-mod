@@ -824,10 +824,22 @@ static int hax_dump_cheatlist(lua_State *L)
 
 }
 
-static int hax_throttle(lua_State *L)
+static int hax_set_throttle(lua_State *L)
 {
 	systemSetThrottle(luaL_checkinteger(L, 1));
 	return 0;
+}
+
+static int hax_get_throttle(lua_State *L)
+{
+	lua_pushinteger(L, systemGetThrottle());
+	return 1;
+}
+
+static int hax_get_speed(lua_State *L)
+{
+	lua_pushinteger(L, systemSpeed);
+	return 1;
 }
 
 static int hax_get_pid(lua_State *L)
@@ -4704,7 +4716,9 @@ static const struct luaL_reg haxlib[] = {
 	//{ "del_cheat_code",	hax_del_cheat_code	}, // YOU DONT EXIST YET
 	{ "enable_cheat",	hax_enable_cheat	},
 	{ "disable_cheat",	hax_disable_cheat	},
-	{ "throttle",		hax_throttle		},
+	{ "set_throttle",	hax_set_throttle	},
+	{ "get_throttle",	hax_get_throttle	},
+	{ "get_speed",		hax_get_speed		},
 //	{ "get_palette_address", hax_get_palette_address},
 //	{ "write_palette",	hax_write_palette	},
 	{ "get_pid",		hax_get_pid			},
@@ -4978,6 +4992,8 @@ void VBALuaFrameBoundary(void)
 */
 int VBALoadLuaCode(const char *filename)
 {
+	printf("Entered 'VBALoadLuaCode', with param %s",	filename);
+		
 	if (!DemandLua())
 	{
 		return 0;
