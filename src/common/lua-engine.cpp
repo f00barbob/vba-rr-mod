@@ -4709,14 +4709,14 @@ static void VBALuaHookFunction(lua_State *L, lua_Debug *dbg)
 }
 
 static const struct luaL_reg haxlib[] = {
-	{ "get_cheat_count",hax_get_cheat_count	},
-	{ "get_cheat_code",	hax_get_cheat_code	},
-	{ "get_cheat_desc", hax_get_cheat_desc	},
+	{ "get_cheat_count",hax_get_cheat_count	}, //get total count of cheatcodes
+	{ "get_cheat_code",	hax_get_cheat_code	}, //get actual code
+	{ "get_cheat_desc", hax_get_cheat_desc	}, //get cheat description
 	//{ "add_cheat_code", hax_add_cheat_code  }, 
 	//{ "del_cheat_code",	hax_del_cheat_code	}, // YOU DONT EXIST YET
-	{ "enable_cheat",	hax_enable_cheat	},
-	{ "disable_cheat",	hax_disable_cheat	},
-	{ "set_throttle",	hax_set_throttle	},
+	{ "enable_cheat",	hax_enable_cheat	}, //enable a cheat by index
+	{ "disable_cheat",	hax_disable_cheat	}, //disable a cheat by index
+	{ "set_throttle",	hax_set_throttle	}, //these don't seem to work in gb mode yet
 	{ "get_throttle",	hax_get_throttle	},
 	{ "get_speed",		hax_get_speed		},
 //	{ "get_palette_address", hax_get_palette_address},
