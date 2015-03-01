@@ -6,6 +6,7 @@
 #include <cctype>
 #include <cmath>
 #include <ctime>
+#include <iostream>
 
 #include <vector>
 #include <map>
@@ -34,6 +35,8 @@ using namespace std;
 	#define stricmp strcasecmp
 	#define strnicmp strncasecmp
 #endif
+
+#include "../pokeram.h"
 
 #include "../Port.h"
 #include "System.h"
@@ -96,6 +99,20 @@ static int	info_uid;
 	#define countof(a)  (sizeof(a) / sizeof(a[0]))
 #endif
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 static lua_State *LUA;
 
 // Are we running any code right now?
@@ -145,6 +162,8 @@ static unsigned int numMemHooks;
 static const char *button_mappings[] = {
 	"A", "B", "select", "start", "right", "left", "up", "down", "R", "L"
 };
+
+
 
 #ifdef _MSC_VER
 	#define snprintf _snprintf
@@ -1035,6 +1054,146 @@ static int hax_read_pokestring_delimited(lua_State *L)
 	return 1;
 }
 
+
+static int poke_get_money(lua_State *L)
+{
+	int money1 = gbReadMemoryQuick8(0xD347);
+	int money2 = gbReadMemoryQuick8(0xD348);
+	int money3 = gbReadMemoryQuick8(0xD349);
+	
+	char smoney [10];
+	sprintf(smoney, "%02x%02x%02x", money1, money2, money3);
+
+	u32 money = atoi(smoney);
+
+	lua_pushinteger(L, money);
+	return 1;
+}
+
+static int poke_set_money(lua_State *L)
+{
+	u32 newmoney = luaL_checkinteger(L, 1);
+
+	printf("Setting money: %i", newmoney);
+
+	char tempmoney[9];
+	sprintf(tempmoney, "%08i", newmoney); 
+
+	char tempmoney1[3];
+	char tempmoney2[3];
+	char tempmoney3[3];
+
+	tempmoney1[0] = tempmoney[2];
+	tempmoney1[1] = tempmoney[3];
+	tempmoney2[0] = tempmoney[4];
+	tempmoney2[1] = tempmoney[5];
+	tempmoney3[0] = tempmoney[6];
+	tempmoney3[1] = tempmoney[7];
+	
+	tempmoney1[2] = 0;
+	tempmoney2[2] = 0;
+	tempmoney3[2] = 0;
+
+	u8 money1 = strtol(tempmoney1,NULL,16);
+	u8 money2 = strtol(tempmoney2,NULL,16);
+	u8 money3 = strtol(tempmoney3,NULL,16);
+			
+	gbWriteMemoryQuick8(pokeram.money[0], money1);
+	gbWriteMemoryQuick8(pokeram.money[1], money2);
+	gbWriteMemoryQuick8(pokeram.money[2], money3);
+
+	return 0;
+}
+
+static int poke_get_item_name(lua_State *L)
+{
+	int bag_index = luaL_checkinteger(L, 1);
+	int bag_item = gbReadMemoryQuick8(pokeram.items.item[bag_index]);
+	lua_pushstring(L, pokeram.item_names[bag_item].c_str());
+	return 1;
+}
+
+static int poke_get_bag_item(lua_State *L)
+{
+	int bag_index = luaL_checkinteger(L, 1);
+	lua_pushinteger(L, gbReadMemoryQuick8(pokeram.items.item[bag_index]));
+	return 1;
+}
+
+static int poke_set_bag_qty(lua_State *L)
+{
+	int bag_index = luaL_checkinteger(L, 1);
+	int new_quantity = luaL_checkinteger(L, 2);
+	gbWriteMemoryQuick8(pokeram.items.qty[bag_index], new_quantity);
+	cout << "Setting qty idx " << bag_index << " address " << std::hex << pokeram.items.qty[bag_index] <<" to " << new_quantity <<endl;
+	return 0; 
+}
+
+static int poke_set_bag_item(lua_State *L)
+{
+	int bag_index = luaL_checkinteger(L, 1);
+	int new_item = luaL_checkinteger(L, 2);
+	gbWriteMemoryQuick8(pokeram.items.item[bag_index], new_item);
+	printf("Setting item idx %i to %i\n", bag_index, new_item);
+	return 0;
+}
+
+static int poke_add_bag_item(lua_State *L)
+{
+	int new_item = luaL_checkinteger(L, 1);
+	int bag_count = gbReadMemoryQuick8(pokeram.items.count);
+	printf("count address: 0x%04x", pokeram.items.count);
+	printf("bag 0 address: 0x%04x", pokeram.items.item[0]);
+	printf("qty 0 address: 0x%04x", pokeram.items.qty[0]);
+
+	printf("Trying to add bag item...\n");
+	if (bag_count < 20)
+	{
+		printf("We have space, incrementing bag count, adding FF\n");
+		gbWriteMemoryQuick8(pokeram.items.count, bag_count + 1); // update bag size
+		gbWriteMemoryQuick8(pokeram.items.item[bag_count], new_item); // write the new item
+		gbWriteMemoryQuick8(pokeram.items.qty[bag_count], 1);	//new item quantity 1
+		gbWriteMemoryQuick8(pokeram.items.qty[bag_count] + 1 , 0xFF); // set the new list terminator
+
+	}
+	else
+	{
+		printf("Out of space, aborting.\n");
+	}
+
+
+	return 0;
+}
+
+static int poke_get_bag_qty(lua_State *L)
+{
+	int itemno = luaL_checkinteger(L, 1);
+
+	if (itemno <= 20 && itemno >= 0)
+	{
+		lua_pushinteger(L, gbReadMemoryQuick8(pokeram.items.qty[itemno]));
+	}
+	else
+	{
+		lua_pushinteger(L, 0);
+	}
+
+	return 1;
+}
+
+static int poke_get_bag_count(lua_State *L)
+{
+	lua_pushinteger(L, gbReadMemoryQuick8(pokeram.items.count));
+	return 1;
+}
+
+static int poke_init_rammap(lua_State *L)
+{
+	init_rammap();
+
+	return 0;
+}
+
 // MODS BY f00barbob
 
 
@@ -1655,6 +1814,9 @@ static int memory_readbyte(lua_State *L)
 	return 1;
 }
 
+
+
+
 static int memory_readbytesigned(lua_State *L)
 {
 	u32 addr;
@@ -1846,6 +2008,26 @@ static int memory_writedword(lua_State *L)
 	}
 
 	CallRegisteredLuaMemHook(addr, 4, val, LUAMEMHOOK_WRITE);
+	return 0;
+}
+
+static int memory_gbromwritebyte(lua_State *L)
+{
+	u32 addr;
+	int val;
+
+	addr = luaL_checkinteger(L, 1);
+	val = luaL_checkinteger(L, 2);
+	if (systemIsRunningGBA())
+	{
+		CPUWriteByteQuick(addr, val); // maybe i'll implement this later;
+	}
+	else
+	{
+		gbWriteRomQuick8(addr, val);
+	}
+
+	CallRegisteredLuaMemHook(addr, 1, val, LUAMEMHOOK_WRITE); // probably not needed.
 	return 0;
 }
 
@@ -3426,6 +3608,98 @@ draw_outline:
 	}
 }
 
+
+
+static void PutTextInternal2x(const char *str, int len, short x, short y, int color, int backcolor)
+{
+	int Opac = (color >> 24) & 0xFF;
+	int backOpac = (backcolor >> 24) & 0xFF;
+	int origX = x;
+
+	if (!Opac && !backOpac)
+		return;
+
+	while (*str && len && y < 239)
+	{
+		int c = *str++;
+		while (x > 256 && c != '\n') {
+			c = *str;
+			if (c == '\0')
+				break;
+			str++;
+		}
+		if (c == '\n')
+		{
+			x = origX;
+			y += 16;//
+			continue;
+		}
+		else if (c == '\t') // just in case
+		{
+			const int tabSpace = 8;
+			x += (tabSpace - (((x - origX) / 4) % tabSpace)) * 8;//
+			continue;
+		}
+		if ((unsigned int)(c - 32) >= 96)
+			continue;
+		const unsigned char* Cur_Glyph = (const unsigned char*)&Small_Font_Data + (c - 32) * 7 * 4;
+
+		for (int y2 = 0; y2 < 8; y2++)
+		{
+			unsigned int glyphLine = *((unsigned int*)Cur_Glyph + y2);
+			for (int x2 = -1; x2 < 4; x2++)
+			{
+				int shift = x2 << 3;
+				int mask = 0xFF << shift;
+				int intensity = (glyphLine & mask) >> shift;
+
+				if (intensity && x2 >= 0 && y2 < 7)
+				{
+					//int xdraw = max(0,min(256 - 1,x+x2));
+					//int ydraw = max(0,min(239 - 1,y+y2));
+					//gui_drawpixel_fast(xdraw, ydraw, color);
+					//gui_drawpixel_internal(x+x2, y+y2, color);
+					gui_drawpixel_internal(x + (x2 * 2), y + (y2 * 2), color);
+					gui_drawpixel_internal(x + (x2 * 2) + 1, y + (y2 * 2), color);
+					gui_drawpixel_internal(x + (x2 * 2), y + (y2 * 2) + 1, color);
+					gui_drawpixel_internal(x + (x2 * 2) + 1, y + (y2 * 2) + 1, color);
+				}
+				else if (backOpac)
+				{
+					for (int y3 = max(0, y2 - 1); y3 <= min(6, y2 + 1); y3++)
+					{
+						unsigned int glyphLine = *((unsigned int*)Cur_Glyph + y3);
+						for (int x3 = max(0, x2 - 1); x3 <= min(3, x2 + 1); x3++)
+						{
+							int shift = x3 << 3;
+							int mask = 0xFF << shift;
+							intensity |= (glyphLine & mask) >> shift;
+							if (intensity)
+								goto draw_outline; // speedup?
+						}
+					}
+				draw_outline:
+					if (intensity)
+					{
+						//int xdraw = max(0,min(256 - 1,x+x2));
+						//int ydraw = max(0,min(239 - 1,y+y2));
+						//gui_drawpixel_fast(xdraw, ydraw, backcolor);
+						//gui_drawpixel_internal(x+x2, y+y2, backcolor);
+						gui_drawpixel_internal(x + (x2 * 2), y + (y2 * 2), backcolor);
+						gui_drawpixel_internal(x + (x2 * 2) + 1, y + (y2 * 2), backcolor);
+						gui_drawpixel_internal(x + (x2 * 2), y + (y2 * 2) + 1, backcolor);
+						gui_drawpixel_internal(x + (x2 * 2) + 1, y + (y2 * 2) + 1, backcolor);
+					}
+				}
+			}
+		}
+
+		x += 8;
+		len--;
+	}
+}
+
+
 static int strlinelen(const char *string)
 {
 	const char *s = string;
@@ -3435,6 +3709,18 @@ static int strlinelen(const char *string)
 		s++;
 	return s - string;
 }
+
+
+static void LuaDisplayString2x(const char *string, int y, int x, uint32 color, uint32 outlineColor)
+{
+	if (!string)
+		return;
+
+	gui_prepare();
+
+	PutTextInternal2x(string, strlen(string), x, y, color, outlineColor);
+}
+
 
 static void LuaDisplayString(const char *string, int y, int x, uint32 color, uint32 outlineColor)
 {
@@ -3512,6 +3798,30 @@ static int gui_text(lua_State *L)
 
 	return 0;
 }
+
+static int gui_text2x(lua_State *L) {
+	//extern int font_height;
+	const char *msg;
+	int x, y;
+	uint32 colour, borderColour;
+
+	x = luaL_checkinteger(L, 1);
+	y = luaL_checkinteger(L, 2);
+	msg = luaL_checkstring(L, 3);
+
+	//	if (x < 0 || x >= 256 || y < 0 || y >= (239 - font_height))
+	//		luaL_error(L,"bad coordinates");
+
+	colour = gui_optcolour(L, 4, LUA_BUILD_PIXEL(255, 255, 255, 255));
+	borderColour = gui_optcolour(L, 5, LUA_BUILD_PIXEL(255, 0, 0, 0));
+
+	gui_prepare();
+
+	LuaDisplayString2x(msg, y, x, colour, borderColour);
+
+	return 0;
+}
+
 
 // gui.gdoverlay([int dx=0, int dy=0,] string str [, sx=0, sy=0, sw, sh] [, float alphamul=1.0])
 //
@@ -4729,6 +5039,22 @@ static const struct luaL_reg haxlib[] = {
 	{ NULL,				NULL				}
 };
 
+static const struct luaL_reg pokelib[] = {
+
+	{ "read_pokestring_delimited",  hax_read_pokestring_delimited },
+	{ "get_money" ,				poke_get_money },			//return money count
+	{ "set_money" ,				poke_set_money },			//return money count
+	{ "get_item_name",			poke_get_item_name},		//return string of item name 
+	{ "get_bag_item",				poke_get_bag_item},			//return int of item value
+	{ "set_bag_item",				poke_set_bag_item },		//sets bag item value
+	{ "get_bag_qty",		poke_get_bag_qty},		//return int of particular item quantity
+	{ "set_bag_qty",		poke_set_bag_qty },	//sets item quantity
+	{ "get_bag_count",				poke_get_bag_count},			//get count (int) of total items in bag
+	{ "add_bag_item",				poke_add_bag_item},
+	{ "init_rammap",				poke_init_rammap },				// cuz i'm lzy
+	{ NULL, NULL }
+};
+
 static const struct luaL_reg vbalib[] = {
 	//	{"speedmode", vba_speedmode},	// TODO: NYI
 	{ "frameadvance",	vba_frameadvance	  },
@@ -4778,6 +5104,7 @@ static const struct luaL_reg memorylib[] = {
 	{ "readlongsigned",			memory_readdwordsigned		},
 	{ "writeshort",				memory_writeword			},
 	{ "writelong",				memory_writedword			},
+	{ "gbromwritebyte",			memory_gbromwritebyte		},
 	{ "gbromreadbyteunsigned",	memory_gbromreadbyte		},
 	{ "gbromreadwordunsigned",	memory_gbromreadword		},
 	{ "gbromreaddwordunsigned",	memory_gbromreaddword		},
@@ -4853,6 +5180,7 @@ static const struct luaL_reg movielib[] = {
 static const struct luaL_reg guilib[] = {
 	{ "register",	  gui_register		   },
 	{ "text",		  gui_text			   },
+	{ "text2x",		  gui_text2x           },
 	{ "box",		  gui_drawbox		   },
 	{ "line",		  gui_drawline		   },
 	{ "pixel",		  gui_drawpixel		   },
@@ -4866,6 +5194,7 @@ static const struct luaL_reg guilib[] = {
 
 	// alternative names
 	{ "drawtext",	  gui_text			   },
+	{ "drawtext2x",   gui_text2x           },
 	{ "drawbox",	  gui_drawbox		   },
 	{ "drawline",	  gui_drawline		   },
 	{ "drawpixel",	  gui_drawpixel		   },
@@ -5039,6 +5368,7 @@ int VBALoadLuaCode(const char *filename)
 		luaL_register(LUA, "vba", vbalib); // kept for backward compatibility
 		luaL_register(LUA, "memory", memorylib);
 		luaL_register(LUA, "hax", haxlib);
+		luaL_register(LUA, "poke", pokelib);
 		luaL_register(LUA, "joypad", joypadlib);
 		luaL_register(LUA, "savestate", savestatelib);
 		luaL_register(LUA, "movie", movielib);

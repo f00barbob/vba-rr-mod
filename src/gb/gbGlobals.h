@@ -56,6 +56,12 @@ static inline void gbWriteMemoryQuick(u16 address, u8 value)
 	gbMemoryMap[address >> 12][address & 0xfff] = value;
 }
 
+static inline void gbWriteRomQuick8(u32 address, u8 value)
+{
+
+	gbRom[address] = value;
+}
+
 static inline u8 gbReadMemoryQuick8(u16 addr)
 {
 	return gbReadMemoryQuick(addr);
