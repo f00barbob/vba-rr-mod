@@ -1184,6 +1184,9 @@
     <ClInclude Include="..\src\gba\V7\bios.cpp">
       <Filter>Source Files\GBA\V7</Filter>
     </ClInclude>
+    <ClInclude Include="pokeram.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\win32\7zip\7zip.rc">
