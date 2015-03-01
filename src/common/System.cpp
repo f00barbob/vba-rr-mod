@@ -324,7 +324,7 @@ void systemGetLCDResolution(int32 &width, int32& height)
 		break;
 	case GB_NDR:
 		width = 160;
-		height = 144;
+		height = 160; //test
 		break;
 	case SGB_NDR:
 		width = 256;
@@ -344,7 +344,7 @@ void systemGetLCDBaseSize(int32 &width, int32& height)
 	case GB_NDR:
 	case SGB_NDR:
 		width = 160;
-		height = 144;
+		height = 160; //testing by bob
 		break;
 	}
 }
