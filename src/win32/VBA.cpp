@@ -13,6 +13,15 @@
 #include <fstream>
 #endif
 
+#ifndef _DEBUG
+#include <Windows.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <io.h>
+#include <iostream>
+#include <fstream>
+#endif
+
 #include "resource.h"
 #include "VBA.h"
 #include "AVIWrite.h"
