@@ -1,15 +1,20 @@
+-- a simple script that implements a custom mute and unmute function added to VBA-rr
+
 local save_path = "z:/" -- don't forget to escape backslashes, or use frontslashes instead
 local save_prefix = "save"
 local save_ext = "sgm"
 
 -- the result are save files with a naming format like "Z:\save11370049985.sgm"
 -- the timestamps are so-called epoch times.
+-- a save is made each time it starts, but can be changed by setting the did_save flag to true
+
+local did_save = false -- set this to true if you don't want a save on start.
 
 local save_interval = 20  -- in minutes
 local save_interval = save_interval * 60
 
-local did_save = false
-
+-- table of keybindings; for a swapping effect, modify a second copy of this script to use
+-- the opposite configuration. Using discrete buttons prevents these from every being desynced
 keyBindings	= {
 	keyMute	= "M",
 	keyUnmute  = "N"
@@ -23,6 +28,7 @@ while true do
 	inpt	= input.get()
     
     -- not neccessary, but these prevent the effects of a key being held continuously for more than 1 frame.
+    -- this method, i believe, i borrowed from a rewind script for FCEUX
     
 	if  inpt[keyBindings['keyMute']] and not inpto[keyBindings['keyMute']] then
         emu.mute()
@@ -46,7 +52,7 @@ while true do
     end
         
         
-    
+    -- carry on with the emulation
     emu.frameadvance()
     
 end
