@@ -808,6 +808,14 @@ static int hax_add_cheat(lua_State *L)
 
 }
 
+static int hax_reset(lua_State *L)
+{
+	theApp.emulator.emuReset();
+	return 0;
+
+}
+
+
 
 static int hax_enable_cheat(lua_State *L)
 {
@@ -5036,6 +5044,7 @@ static const struct luaL_reg haxlib[] = {
 	{ "read_string",	hax_read_string		},
 	{ "read_pokestring_delimited",	hax_read_pokestring_delimited},
 	{ "save",			hax_savestate_save	},
+	{ "reset", hax_reset },
 	{ NULL,				NULL				}
 };
 
