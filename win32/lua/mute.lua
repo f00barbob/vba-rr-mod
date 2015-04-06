@@ -45,6 +45,7 @@ while true do
     --  (1 per frame from for one minute) from being made
     if current_interval == 0
     and did_save == false then
+        -- this line can be modified to alter the output filename format
         hax.save(save_path .. "\\" .. save_prefix .. os.time() .. "." .. save_ext)
         did_save = true
     elseif current_interval ~= 0 then -- once the remainder is non-zero, reset the flag
