@@ -538,7 +538,7 @@ BOOL VBA::InitInstance()
 //#else
 //  Enable3dControlsStatic();  // Call this when linking to MFC statically
 //#endif
-
+	bool doKillConsole = true;
 	SetRegistryKey(_T("VBA"));
 
 	remoteSetProtocol(0);
@@ -628,12 +628,12 @@ BOOL VBA::InitInstance()
 					printf("Trying to load lua %s",luaFileName);
 					winCorrectPath(luaFileName);
 				}
-#ifdef _DEBUG
-				else if (_stricmp(argv[i], "-noconsole") == 0)
+
+				else if (_stricmp(argv[i], "-console") == 0)
 				{
-					KillConsole();
+					doKillConsole = false;
 				}
-#endif
+
 				else if (_stricmp(argv[i], "-frameskip") == 0)
 				{
 					if (i + 1 >= argc || argv[i + 1][0] == '-')
@@ -810,7 +810,15 @@ invalidArgument:
 		}
 		free(argv);
 	}
-	VBALoadLuaCode(luaFileName);
+	if (doKillConsole)
+	{
+		KillConsole();
+	}
+	if (luaFileName)
+	{
+		VBALoadLuaCode(luaFileName);
+	}
+
 	return TRUE;
 }
 
