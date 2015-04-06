@@ -770,6 +770,21 @@ static int vba_message(lua_State *L)
 	return 0;
 }
 
+static int vba_mute(lua_State *L)
+{
+	systemSoundDisableChannels(0x030f);
+//	pCmdUI->SetCheck((systemSoundGetEnabledChannels() & 0x030f) == 0);
+
+	return 0;
+}
+
+static int vba_unmute(lua_State *L)
+{
+	systemSoundEnableChannels(0x030f);
+//	pCmdUI->SetCheck((systemSoundGetEnabledChannels() & 0x030f) == 0);
+	return 0;
+}
+
 
 // MODS BY f00barbob
 static int hax_get_cheat_count(lua_State *L)
@@ -5077,6 +5092,8 @@ static const struct luaL_reg vbalib[] = {
 	{ "registerexit",	vba_registerexit	  },
 	{ "message",		vba_message			  },
 	{ "print",			print				  }, // sure, why not
+	{ "mute",			vba_mute			  },
+	{ "unmute",			vba_unmute			  },
 	{ NULL,				NULL				  }
 };
 
