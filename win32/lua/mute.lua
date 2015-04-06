@@ -1,6 +1,9 @@
-local save_path = "z:/" -- don't forget to escape backslashes
-local save_prefix = "mudge"
+local save_path = "z:/" -- don't forget to escape backslashes, or use frontslashes instead
+local save_prefix = "save"
 local save_ext = "sgm"
+
+-- the result are save files with a naming format like "Z:\save11370049985.sgm"
+-- the timestamps are so-called epoch times.
 
 local save_interval = 1  -- in minutes
 local save_interval = save_interval * 60
