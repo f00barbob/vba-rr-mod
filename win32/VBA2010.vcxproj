@@ -677,6 +677,7 @@
     <ClCompile Include="..\src\gba\RTC.cpp" />
     <ClCompile Include="..\src\gba\GBASound.cpp" />
     <ClCompile Include="..\src\gba\Sram.cpp" />
+    <ClCompile Include="..\src\win32\Dialogs\DSoundConf.cpp" />
     <ClCompile Include="lib\libpng\png.c" />
     <ClCompile Include="lib\libpng\pngerror.c" />
     <ClCompile Include="lib\libpng\pnggccrd.c" />
@@ -1130,6 +1131,7 @@
     <ClCompile Include="..\src\win32\WinResUtil.cpp" />
     <ClCompile Include="..\src\win32\7zip\7zip.cpp" />
     <ClCompile Include="..\src\win32\7zip\OpenArchive.cpp" />
+    <ClInclude Include="..\src\win32\Dialogs\DSoundConf.h" />
     <ClInclude Include="pokeram.h" />
   </ItemGroup>
   <ItemGroup>
