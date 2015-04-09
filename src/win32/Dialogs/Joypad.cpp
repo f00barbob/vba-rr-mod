@@ -7,7 +7,7 @@
 #include "../Input.h"
 #include "../VBA.h"
 
-extern USHORT joypad[4][13];
+extern USHORT joypad[4][16];
 extern USHORT motion[4];
 
 /////////////////////////////////////////////////////////////////////////////
@@ -79,6 +79,9 @@ void JoypadConfig::DoDataExchange(CDataExchange*pDX)
 	DDX_Control(pDX, IDC_EDIT_BUTTON_GS, buttonGS);
 	DDX_Control(pDX, IDC_EDIT_BUTTON_B, buttonB);
 	DDX_Control(pDX, IDC_EDIT_BUTTON_A, buttonA);
+	DDX_Control(pDX, IDC_EDIT_BUTTON_MUTE, buttonMute);
+	DDX_Control(pDX, IDC_EDIT_BUTTON_UNMUTE, buttonUnmute);
+	DDX_Control(pDX, IDC_EDIT_BUTTON_SAVESTATE, buttonSavestate);
 	//}}AFX_DATA_MAP
 }
 
@@ -173,6 +176,15 @@ BOOL JoypadConfig::OnInitDialog()
 	SetWindowLong(buttonGS, GWL_USERDATA, joypad[which][KEY_BUTTON_GS]);
 	buttonGS.SetWindowText(theApp.input->getKeyName(joypad[which][KEY_BUTTON_GS]));
 
+	SetWindowLong(buttonMute, GWL_USERDATA, joypad[which][KEY_BUTTON_MUTE]);
+	buttonMute.SetWindowText(theApp.input->getKeyName(joypad[which][KEY_BUTTON_MUTE]));
+
+	SetWindowLong(buttonUnmute, GWL_USERDATA, joypad[which][KEY_BUTTON_UNMUTE]);
+	buttonUnmute.SetWindowText(theApp.input->getKeyName(joypad[which][KEY_BUTTON_UNMUTE]));
+
+	SetWindowLong(buttonSavestate, GWL_USERDATA, joypad[which][KEY_BUTTON_SAVESTATE]);
+	buttonSavestate.SetWindowText(theApp.input->getKeyName(joypad[which][KEY_BUTTON_SAVESTATE]));
+
 	CenterWindow();
 
 	return TRUE; // return TRUE unless you set the focus to a control
@@ -222,6 +234,15 @@ void JoypadConfig::assignKey(int id, int key)
 	case IDC_EDIT_BUTTON_GS:
 		joypad[which][KEY_BUTTON_GS] = key;
 		break;
+	case IDC_EDIT_BUTTON_MUTE:
+		joypad[which][KEY_BUTTON_MUTE] = key;
+		break;
+	case IDC_EDIT_BUTTON_UNMUTE:
+		joypad[which][KEY_BUTTON_UNMUTE] = key;
+		break;
+	case IDC_EDIT_BUTTON_SAVESTATE:
+		joypad[which][KEY_BUTTON_SAVESTATE] = key;
+		break;
 	}
 }
 
@@ -267,6 +288,13 @@ void JoypadConfig::assignKeys()
 
 	id = IDC_EDIT_BUTTON_GS;
 	assignKey(id, GetWindowLong(buttonGS, GWL_USERDATA));
+
+	id = IDC_EDIT_BUTTON_MUTE;
+	assignKey(id, GetWindowLong(buttonMute, GWL_USERDATA));
+	id = IDC_EDIT_BUTTON_UNMUTE;
+	assignKey(id, GetWindowLong(buttonUnmute, GWL_USERDATA));
+	id = IDC_EDIT_BUTTON_SAVESTATE;
+	assignKey(id, GetWindowLong(buttonSavestate, GWL_USERDATA));
 
 	//  winSaveKeys();
 }

@@ -21,6 +21,7 @@
 #include "../common/nesvideos-piece.h"
 #include "../common/vbalua.h"
 #include "../version.h"
+#include "Reg.h"
 #include "Dialogs/ram_search.h"
 #include <cassert>
 
@@ -383,6 +384,81 @@ void systemMessage(int number, const char *defaultMsg, ...)
 
 	va_end(valist);
 }
+
+
+
+void systemSaveState()
+{
+	time_t now;
+	struct tm * timeinfo;
+	char tbuffer[80];
+
+	time(&now);
+	timeinfo = localtime(&now);
+	strftime(tbuffer, 80, " %Y-%m-%d %H.%M.%S", timeinfo);
+
+	//	tm* localtm = localtime(&now);
+
+
+	char drive[_MAX_DRIVE];
+	char dir[_MAX_DIR];
+	char fname[_MAX_FNAME];
+	char ext[_MAX_EXT];
+	_splitpath(theApp.romFilename, drive, dir, fname, ext); // C4996
+
+	std::string temp;
+	std::string newsavefile;
+
+	newsavefile.append(regQueryStringValue(IDS_STATE_DIR, NULL));
+	newsavefile.append(fname);
+	newsavefile.append(tbuffer);
+	newsavefile.append(".sgm");
+
+	//std::replace(newsavefile.begin(), newsavefile.end(), ':', '.'); 
+
+
+	temp.append("Wrote save: ");
+	temp.append(newsavefile);
+	systemScreenMessage(temp.c_str());
+	printf("%s\n", temp.c_str());
+	theApp.emulator.emuWriteState(newsavefile.c_str());
+}
+/*
+void systemSaveState()
+{
+	time_t now;
+	struct tm * timeinfo;
+	char tbuffer[80];
+
+	time(&now);
+	timeinfo = localtime(&now);
+	strftime(tbuffer, 80, " %Y-%m-%d %H.%M.%S", timeinfo);
+
+	//	tm* localtm = localtime(&now);
+
+
+	char drive[_MAX_DRIVE];
+	char dir[_MAX_DIR];
+	char fname[_MAX_FNAME];
+	char ext[_MAX_EXT];
+	_splitpath(theApp.filename, drive, dir, fname, ext); // C4996
+
+	std::string temp;
+	std::string newsavefile;
+
+	newsavefile.append(regQueryStringValue("tsaveDir", NULL));
+	newsavefile.append(fname);
+	newsavefile.append(tbuffer);
+	newsavefile.append(".sgm");
+
+	//std::replace(newsavefile.begin(), newsavefile.end(), ':', '.'); 
+
+
+	temp.append("Wrote save: ");
+	temp.append(newsavefile);
+	systemScreenMessage(temp.c_str());
+	theApp.emulator.emuWriteState(newsavefile.c_str());
+}*/
 
 void systemScreenMessage(const char *msg, int slot, int duration, const char *colorList)
 {

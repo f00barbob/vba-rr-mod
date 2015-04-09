@@ -70,6 +70,9 @@ public:
 	JoypadEditControl buttonGS;
 	JoypadEditControl buttonB;
 	JoypadEditControl buttonA;
+	JoypadEditControl buttonMute;
+	JoypadEditControl buttonUnmute;
+	JoypadEditControl buttonSavestate;
 	//}}AFX_DATA
 
 	// Overrides

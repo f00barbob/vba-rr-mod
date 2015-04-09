@@ -1,3 +1,4 @@
+#include "../win32/stdafx.h"
 #include "System.h"
 #include "SystemGlobals.h"
 #include "inputGlobal.h"
@@ -5,6 +6,7 @@
 #include "../gba/GBA.h"
 #include "../common/movie.h"
 #include "../common/vbalua.h"
+#include "../win32/winmiscutil.h"
 
 // evil macros
 #ifndef countof
@@ -227,6 +229,21 @@ bool systemFrameDrawingRequired()
 	return frameSkipCount >= systemFramesToSkip() || pauseAfterFrameAdvance;
 }
 
+void systemMute()
+{
+	systemScreenMessage("Sound Muted");
+	systemSoundDisableChannels(0x30F);
+}
+
+void systemUnmute()
+{
+	systemScreenMessage("Sound Unmuted");
+	systemSoundEnableChannels(0x30F);
+
+}
+
+
+
 void systemFrameBoundaryWork()
 {
 	newFrame = true;
@@ -254,6 +271,15 @@ void systemFrameBoundaryWork()
 
 	if (systemFrameDrawingRequired())
 	{
+		/*printf("1:\n%i\n", extButtons & 1);
+		printf("2:\t%i\n", extButtons & 2);
+		printf("4:\t%i\n", extButtons & 4);
+		printf("8:\t%i\n", extButtons & 8);
+		printf("16:\t%i\n", extButtons & 16);
+		printf("32:\t%i\n", extButtons & 32);
+		printf("64:\t%i\n", extButtons & 64);
+		printf("128:\t%i\n", extButtons & 128);*/
+
 		systemRenderFrame();
 		frameSkipCount = 0;
 
@@ -263,6 +289,32 @@ void systemFrameBoundaryWork()
 			captureNumber = systemScreenCapture(captureNumber);
 		}
 		capturePrevious = capturePressed && !pauseAfterFrameAdvance;
+
+		mute = (extButtons & 16) ? true : false;
+		unmute = (extButtons & 32) ? true : false;
+		saveState = (extButtons & 64) ? true : false;
+
+
+
+		if (mute && !mutePrevious) {
+			printf("trying to mute ;~;");
+			/*systemSoundDisableChannels(0x030f);*/
+			systemMute();
+		}
+		mutePrevious = mute;
+
+		if (unmute && !unmutePrevious) {
+			systemUnmute();
+		}
+		unmutePrevious = unmute;
+
+		if (saveState && !saveStatePrevious) {
+			printf("trying to savestate ;~;");
+			systemScreenMessage("HALP");
+
+			systemSaveState();
+		}
+		saveStatePrevious = saveState;
 	}
 	else
 	{
@@ -395,7 +447,7 @@ void systemSoundDisableChannels(int channels)
 }
 
 int systemSoundGetEnabledChannels()
-{
+{ 
 	return (soundEnableFlag & 0x30f);
 }
 

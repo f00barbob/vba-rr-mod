@@ -6,6 +6,7 @@
 #include "VBA.h"
 #include "Dialogs/Associate.h"
 #include "Dialogs/Directories.h"
+#include "Dialogs/DSoundConf.h"
 #include "Dialogs/FileDlg.h"
 #include "Dialogs/GBColorDlg.h"
 #include "Dialogs/Joypad.h"
@@ -647,6 +648,13 @@ void MainWnd::OnOptionsEmulatorDirectories()
 {
 	theApp.winCheckFullscreen();
 	Directories dlg;
+	dlg.DoModal();
+}
+
+void MainWnd::OnOptionsDSoundConf()
+{
+	theApp.winCheckFullscreen();
+	DSoundConf dlg;
 	dlg.DoModal();
 }
 

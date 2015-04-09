@@ -324,6 +324,7 @@ protected:
 	afx_msg void OnUpdateOptionsSoundDirectsounda(CCmdUI*pCmdUI);
 	afx_msg void OnOptionsSoundDirectsoundb();
 	afx_msg void OnUpdateOptionsSoundDirectsoundb(CCmdUI*pCmdUI);
+	afx_msg void OnOptionsDSoundConf();
 	afx_msg void OnOptionsGameboyBorder();
 	afx_msg void OnUpdateOptionsGameboyBorder(CCmdUI*pCmdUI);
 	afx_msg void OnOptionsGameboyPrinter();

@@ -8,10 +8,29 @@
 #include "WavWriter.h"
 #include "VBA.h"
 
+
+
 #include "../common/SystemGlobals.h"
 #include "../common/nesvideos-piece.h"
 
+#include "Reg.h"
+
+
 extern void directXMessage(const char *);
+
+#define MAX_OUTPUTS 32
+
+static int sgOutputCnt = 0;                      // Total number of drivers
+static LPGUID *sgpSelectedOutputGUID;
+
+struct
+{
+	char     szDescription[128];
+	char     szName[128];
+	GUID *   GUID;
+	_GUID     GUIDcopy;
+	//HMONITOR hm;
+} SOutputs[MAX_OUTPUTS];
 
 class DirectSound : public ISound
 {
@@ -37,6 +56,58 @@ public:
 	bool isPlaying();
 	void clearAudioBuffer();
 };
+
+BOOL CALLBACK sDSEnumProc(LPGUID lpGUID, LPCTSTR lpszDesc, LPCTSTR lpszDrvName, LPVOID lpContext)
+{
+	/*LPGUID lpTemp = NULL;
+
+	if (lpGUID != NULL)  //  NULL only for "Primary Sound Driver".
+	{
+	if ((lpTemp = (LPGUID)malloc(sizeof(GUID))) == NULL)
+	{
+	return(TRUE);
+	}
+	memcpy(lpTemp, lpGUID, sizeof(GUID));
+	}
+
+	HWND hList = (HWND)lpContext;*/
+
+	printf("lpContext = %s\n", (char *)lpContext);
+	printf("Device description = %s\n", lpszDesc);
+	printf("Driver name = %s\n", lpszDrvName);
+	printf("\n");
+
+
+	if (lpGUID)
+	{
+		SOutputs[sgOutputCnt].GUIDcopy = *lpGUID;
+		SOutputs[sgOutputCnt].GUID = &SOutputs[sgOutputCnt].GUIDcopy;
+	}
+	else
+	{
+		SOutputs[sgOutputCnt].GUID = NULL;
+	}
+
+	SOutputs[sgOutputCnt].szDescription[127] = '\0';
+	SOutputs[sgOutputCnt].szName[127] = '\0';
+
+	strncpy(SOutputs[sgOutputCnt].szDescription, lpszDesc, 127);
+	strncpy(SOutputs[sgOutputCnt].szName, lpszDrvName, 127);
+
+	//Outputs[gOutputCnt].hm = hm;
+
+	if (sgOutputCnt < MAX_OUTPUTS)
+		sgOutputCnt++;
+	else
+		return 0;
+
+	//hList.AddString("fwef");
+	//ListBox_AddString((HWND)hList, lpszDesc);
+	//ListBox_SetItemData(hList, ListBox_FindString(hList, 0, lpszDesc), lpTemp);
+
+	return TRUE;
+}
+
 
 DirectSound::DirectSound()
 {
@@ -127,7 +198,15 @@ bool DirectSound::init()
 		return false;
 	}
 
-	if (FAILED(hr = DSoundCreate(NULL, &pDirectSound, NULL)))
+
+	BOOL CALLBACK sDSEnumProc(LPGUID lpGUID, LPCTSTR lpszDesc, LPCTSTR lpszDrvName, LPVOID lpContext);
+
+	if ((DirectSoundEnumerate((LPDSENUMCALLBACK)sDSEnumProc, (VOID*)"wut")) == DS_OK)
+		printf("Operation completed successfully.\n");
+	else
+		printf("Houston, we have a problem.\n");
+	
+	if (FAILED(hr = DSoundCreate(SOutputs[regQueryDwordValue("SoundOutput",0)].GUID, &pDirectSound, NULL)))
 	{
 		//    errorMessage(myLoadString(IDS_ERROR_SOUND_CREATE), hr);
 		systemMessage(IDS_CANNOT_CREATE_DIRECTSOUND,
@@ -136,6 +215,9 @@ bool DirectSound::init()
 		dsbSecondary = NULL;
 		return false;
 	}
+
+	memset(SOutputs, 0, sizeof(SOutputs));
+	sgOutputCnt = 0;
 
 	if (FAILED(hr = pDirectSound->SetCooperativeLevel((HWND)*theApp.m_pMainWnd, DSSCL_EXCLUSIVE)))
 	{

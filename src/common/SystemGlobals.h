@@ -76,6 +76,13 @@ extern u32	 extButtons;
 extern bool8 capturePrevious;
 extern int32 captureNumber;
 
+extern bool mute;
+extern bool mutePrevious;
+extern bool unmute;
+extern bool unmutePrevious;
+extern bool saveState;
+extern bool saveStatePrevious;
+
 typedef int32 soundtick_t;
 
 extern soundtick_t USE_TICKS_AS;

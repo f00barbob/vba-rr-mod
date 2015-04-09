@@ -17,6 +17,7 @@ extern const char IDS_AVI_DIR[];
 extern const char IDS_WAV_DIR[];
 extern const char IDS_CAPTURE_DIR[];
 extern const char IDS_WATCH_DIR[];
+extern const char IDS_STATE_DIR[];
 
 extern bool winFileExists(const CString &filename);
 extern bool winIsDriveRoot(const CString &file);

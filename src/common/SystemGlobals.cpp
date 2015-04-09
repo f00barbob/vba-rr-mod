@@ -35,6 +35,13 @@ u32	  extButtons	  = 0;
 bool8 capturePrevious = false;
 int32 captureNumber	  = 0;
 
+bool mute = false;
+bool mutePrevious = false;
+bool unmute = false;
+bool unmutePrevious = false;
+bool saveState = false;
+bool saveStatePrevious = false;
+
 soundtick_t USE_TICKS_AS  = 0;
 soundtick_t soundTickStep = soundQuality * USE_TICKS_AS;
 soundtick_t soundTicks	  = 0;

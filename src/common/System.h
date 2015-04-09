@@ -39,7 +39,15 @@ extern void systemSetJoypad(int, u32);
 extern void systemClearJoypads();
 extern void systemMessage(int, const char *, ...);
 extern void systemScreenMessage(const char *msg, int slot = 0, int duration = 3000, const char *colorList = NULL);
+extern void systemSavestate();
+
 // sound
+
+//extern void systemMute();
+//extern void systemUnmute();
+
+
+
 extern bool systemSoundInit();
 extern void systemSoundShutdown();
 extern void systemSoundPause();
@@ -80,6 +88,7 @@ extern bool systemIsPaused();
 extern void systemSetPause(bool pause);
 extern bool systemPauseOnFrame();
 extern bool systemLoadBIOS(const char *biosFileName, bool useBiosFile);
+extern void systemSaveState();
 
 extern int	systemCartridgeType;
 extern int  systemSpeed;
@@ -95,6 +104,7 @@ extern int  systemDebug;
 extern int  systemVerbose;
 extern int  systemFrameSkip;
 extern int  systemSaveUpdateCounter;
+
 
 // constances
 #define SYSTEM_SAVE_UPDATED 30

@@ -39,6 +39,7 @@ extern const char IDS_AVI_DIR[]		= "aviRecordDir";
 extern const char IDS_WAV_DIR[]		= "soundRecordDir";
 extern const char IDS_CAPTURE_DIR[] = "captureDir";
 extern const char IDS_WATCH_DIR[]	= "watchDir";
+extern const char IDS_STATE_DIR[]   = "stateDir";
 
 extern const char IDS_ROM_DEFAULT_DIR[]		= "\\roms";
 extern const char IDS_GBXROM_DEFAULT_DIR[]	= "\\gbroms";
@@ -56,7 +57,7 @@ extern const char IDS_WATCH_DEFAULT_DIR[]	= "\\watches";
 extern const char *IDS_tbl[] = {
 	IDS_ROM_DIR,   IDS_GBXROM_DIR, IDS_BATTERY_DIR, IDS_SAVE_DIR, 
 	IDS_MOVIE_DIR, IDS_CHEAT_DIR,  IDS_LUA_DIR,     IDS_IPS_DIR, 
-	IDS_AVI_DIR,   IDS_WAV_DIR,    IDS_CAPTURE_DIR, IDS_WATCH_DIR
+	IDS_AVI_DIR,   IDS_WAV_DIR,    IDS_CAPTURE_DIR, IDS_WATCH_DIR, IDS_STATE_DIR
 };
 
 extern const char *IDS_def_tbl[] = {
@@ -165,6 +166,10 @@ CString winGetDestDir(const CString &TargetDirReg)
 			targetDir += IDS_CAPTURE_DEFAULT_DIR;
 		}
 		else if (!TargetDirReg.Compare(IDS_WATCH_DIR))
+		{
+			targetDir += IDS_WATCH_DEFAULT_DIR;
+		}
+		else if (!TargetDirReg.Compare(IDS_STATE_DIR))
 		{
 			targetDir += IDS_WATCH_DEFAULT_DIR;
 		}
