@@ -402,7 +402,7 @@ void Directories::OnOK()
 	else
 		regDeleteValue(IDS_WATCH_DIR);
 
-	m_watchPath.GetWindowText(buffer);
+	m_statePath.GetWindowText(buffer);
 	if (!buffer.IsEmpty())
 		regSetStringValue(IDS_STATE_DIR, buffer);
 	else

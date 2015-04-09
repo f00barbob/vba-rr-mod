@@ -53,6 +53,7 @@ extern const char IDS_AVI_DEFAULT_DIR[]		= "\\avi";
 extern const char IDS_WAV_DEFAULT_DIR[]		= "\\wav";
 extern const char IDS_CAPTURE_DEFAULT_DIR[] = "\\screen";
 extern const char IDS_WATCH_DEFAULT_DIR[]	= "\\watches";
+extern const char IDS_STATE_DEFAULT_DIR[]   = ".\\";
 
 extern const char *IDS_tbl[] = {
 	IDS_ROM_DIR,   IDS_GBXROM_DIR, IDS_BATTERY_DIR, IDS_SAVE_DIR, 
@@ -63,7 +64,7 @@ extern const char *IDS_tbl[] = {
 extern const char *IDS_def_tbl[] = {
 	IDS_ROM_DEFAULT_DIR,   IDS_GBXROM_DEFAULT_DIR, IDS_BATTERY_DEFAULT_DIR, IDS_SAVE_DEFAULT_DIR, 
 	IDS_MOVIE_DEFAULT_DIR, IDS_CHEAT_DEFAULT_DIR,  IDS_LUA_DEFAULT_DIR,     IDS_IPS_DEFAULT_DIR, 
-	IDS_AVI_DEFAULT_DIR,   IDS_WAV_DEFAULT_DIR,    IDS_CAPTURE_DEFAULT_DIR, IDS_WATCH_DEFAULT_DIR
+	IDS_AVI_DEFAULT_DIR,   IDS_WAV_DEFAULT_DIR,    IDS_CAPTURE_DEFAULT_DIR, IDS_WATCH_DEFAULT_DIR, IDS_STATE_DEFAULT_DIR
 };
 
 // these could be made VBA members, but  the VBA class is already oversized too much
@@ -171,7 +172,7 @@ CString winGetDestDir(const CString &TargetDirReg)
 		}
 		else if (!TargetDirReg.Compare(IDS_STATE_DIR))
 		{
-			targetDir += IDS_WATCH_DEFAULT_DIR;
+			targetDir += IDS_STATE_DEFAULT_DIR;
 		}
 		regSetStringValue(TargetDirReg, targetDir);	// Add the directory to the INI file
 	}

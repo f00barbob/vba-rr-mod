@@ -511,7 +511,6 @@
 #define IDC_EDIT_LUAPATH                1285
 #define IDC_BUTTON_LUABROWSE            1286
 #define IDC_PLUGIN_DIR                  1308
-#define IDC_WATCH_DIR                   1309
 #define IDC_STATE_DIR                   1309
 #define IDC_ROM_DIR                     1310
 #define IDC_GBXROM_DIR                  1311
@@ -524,9 +523,8 @@
 #define IDC_WAV_DIR                     1318
 #define IDC_CAPTURE_DIR                 1319
 #define IDC_IPS_DIR                     1320
-#define IDC_WATCH_DIR2                  1321
+#define IDC_WATCH_DIR                   1321
 #define IDC_PLUGIN_PATH                 1328
-#define IDC_WATCH_PATH                  1329
 #define IDC_STATE_PATH                  1329
 #define IDC_ROM_PATH                    1330
 #define IDC_GBXROM_PATH                 1331
@@ -539,9 +537,8 @@
 #define IDC_WAV_PATH                    1338
 #define IDC_CAPTURE_PATH                1339
 #define IDC_IPS_PATH                    1340
-#define IDC_WATCH_PATH2                 1341
+#define IDC_WATCH_PATH                  1341
 #define IDC_PLUGIN_DIR_RESET            1348
-#define IDC_WATCH_DIR_RESET             1349
 #define IDC_STATE_DIR_RESET             1349
 #define IDC_ROM_DIR_RESET               1350
 #define IDC_GBXROM_DIR_RESET            1351
@@ -554,8 +551,7 @@
 #define IDC_WAV_DIR_RESET               1358
 #define IDC_CAPTURE_DIR_RESET           1359
 #define IDC_IPS_DIR_RESET               1360
-#define IDC_LIST1                       1361
-#define IDC_WATCH_DIR_RESET2            1361
+#define IDC_WATCH_DIR_RESET             1361
 #define IDC_BUTTON_LUARUN               1362
 #define IDC_BUTTON_LUASTOP              1363
 #define IDC_LUACONSOLE                  1364
@@ -570,6 +566,7 @@
 #define IDC_ACCELEDIT_AUTOTIMEOUT       1373
 #define IDC_ACCELEDIT_UNDO              1374
 #define IDC_STATIC5                     1375
+#define IDC_LIST1                       1376
 #define IDC_BIT_0                       1380
 #define IDC_BIT_1                       1381
 #define IDC_BIT_2                       1382
