@@ -33,6 +33,7 @@ public:
 	CEdit m_wavPath;
 	CEdit m_capturePath;
 	CEdit m_watchPath;
+	CEdit m_statePath;
 //  CEdit m_pluginPath;
 	//}}AFX_DATA
 
@@ -72,6 +73,8 @@ protected:
 	afx_msg void OnCaptureDirReset();
 	afx_msg void OnWatchDir();
 	afx_msg void OnWatchDirReset();
+	afx_msg void OnStateDir();
+	afx_msg void OnStateDirReset();
 	virtual void OnCancel();
 	virtual void OnOK();
 	//}}AFX_MSG

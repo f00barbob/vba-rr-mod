@@ -205,7 +205,7 @@ static LPDIRECTINPUT pDirectInput  = NULL;
 static int           joyDebug      = 0;
 static int           axisNumber    = 0;
 
-USHORT joypad[4][13] = {
+USHORT joypad[4][16] = {
 	{
 		DIK_LEFT,  DIK_RIGHT,
 		DIK_UP,    DIK_DOWN,
@@ -213,7 +213,7 @@ USHORT joypad[4][13] = {
 		DIK_RETURN, DIK_BACK,
 		DIK_A,     DIK_S,
 		DIK_SPACE, DIK_F12,
-		DIK_C
+		DIK_C, DIK_M, DIK_N, DIK_COMMA
 	},
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -278,6 +278,15 @@ void winReadKeys()
 		key = winReadKey("GS", i);
 		if (key != -1)
 			joypad[i][KEY_BUTTON_GS] = key;
+		key = winReadKey("Mute", i);
+		if (key != -1)
+			joypad[i][KEY_BUTTON_MUTE] = key;
+		key = winReadKey("Unmute", i);
+		if (key != -1)
+			joypad[i][KEY_BUTTON_UNMUTE] = key;
+		key = winReadKey("Savestate", i);
+		if (key != -1)
+			joypad[i][KEY_BUTTON_SAVESTATE] = key;
 	}
 	key = regQueryDwordValue("Motion_Left", (DWORD)-1);
 	if (key != -1)
@@ -317,6 +326,9 @@ void winSaveKeys()
 		winSaveKey("B", i, joypad[i][KEY_BUTTON_B]);
 		winSaveKey("L", i, joypad[i][KEY_BUTTON_L]);
 		winSaveKey("R", i, joypad[i][KEY_BUTTON_R]);
+		winSaveKey("Mute", i, joypad[i][KEY_BUTTON_MUTE]);
+		winSaveKey("Unmute", i, joypad[i][KEY_BUTTON_UNMUTE]);
+		winSaveKey("Savestate", i, joypad[i][KEY_BUTTON_SAVESTATE]);
 		winSaveKey("Start", i, joypad[i][KEY_BUTTON_START]);
 		winSaveKey("Select", i, joypad[i][KEY_BUTTON_SELECT]);
 	}
@@ -547,6 +559,25 @@ static void checkKeys()
 			pDevices[dev].needed = 1;
 		else
 			joypad[i][KEY_BUTTON_GS] = DIK_C;
+
+		dev = joypad[i][KEY_BUTTON_MUTE] >> 8;
+		if (dev < numDevices && dev >= 0)
+			pDevices[dev].needed = 1;
+		else
+			joypad[i][KEY_BUTTON_MUTE] = DIK_M;
+
+		dev = joypad[i][KEY_BUTTON_UNMUTE] >> 8;
+		if (dev < numDevices && dev >= 0)
+			pDevices[dev].needed = 1;
+		else
+			joypad[i][KEY_BUTTON_UNMUTE] = DIK_B;
+
+		dev = joypad[i][KEY_BUTTON_SAVESTATE] >> 8;
+		if (dev < numDevices && dev >= 0)
+			pDevices[dev].needed = 1;
+		else
+			joypad[i][KEY_BUTTON_SAVESTATE] = DIK_COMMA;
+
 	}
 
 	dev = motion[KEY_UP] >> 8;
@@ -1112,6 +1143,12 @@ u32 DirectInput::readDevice(int i, bool sensor)
 			hackedButtons |= BUTTON_MASK_CAPTURE;
 		if (checkKey(joypad[i][KEY_BUTTON_GS]))
 			hackedButtons |= BUTTON_MASK_GAMESHARK;
+		if (checkKey(joypad[i][KEY_BUTTON_MUTE]))
+			hackedButtons |= BUTTON_MASK_MUTE;
+		if (checkKey(joypad[i][KEY_BUTTON_UNMUTE]))
+			hackedButtons |= BUTTON_MASK_UNMUTE;
+		if (checkKey(joypad[i][KEY_BUTTON_SAVESTATE]))
+			hackedButtons |= BUTTON_MASK_SAVESTATE;
 	}
 
 	extern bool systemIsSpedUp();
