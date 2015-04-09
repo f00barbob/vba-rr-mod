@@ -409,7 +409,7 @@ void systemSaveState()
 	std::string temp;
 	std::string newsavefile;
 
-	newsavefile.append(regQueryStringValue(IDS_STATE_DIR, NULL));
+	newsavefile.append(regQueryStringValue(IDS_STATE_DIR, ".\\"));
 	newsavefile.append(fname);
 	newsavefile.append(tbuffer);
 	newsavefile.append(".sgm");
