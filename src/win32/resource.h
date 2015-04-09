@@ -1075,6 +1075,7 @@
 #define ID_AUDIO_DSOUND                 42461
 #define ID_OPTIONS_DSOUND               42462
 #define ID_OPTIONS_DSOUNDCONF           42463
+#define ID_OPTIONS_DIRECTORIES          42464
 #define IDC_C_WATCH_DOWN                43400
 #define IDC_C_WATCH_DUPLICATE           43401
 #define IDC_C_WATCH_EDIT                43402
@@ -1089,8 +1090,8 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        194
-#define _APS_NEXT_COMMAND_VALUE         42464
+#define _APS_NEXT_RESOURCE_VALUE        193
+#define _APS_NEXT_COMMAND_VALUE         42465
 #define _APS_NEXT_CONTROL_VALUE         1502
 #define _APS_NEXT_SYMED_VALUE           43513
 #endif
