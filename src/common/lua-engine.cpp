@@ -1120,30 +1120,29 @@ static int hax_read_pokestring_delimited3(lua_State *L)
 			switch (value)
 			{
 			case 0x00:	value = 0x20;	break; // space
-			case 0x9A:	value = 0x28;	break; // (
-			case 0x9B:	value = 0x29;	break; // )
-			case 0x9C:	value = 0x3A;	break; // :
-			case 0x9D:	value = 0x3B;	break; // ;
-			case 0x9E:	value = 0x5B;	break; // [
-			case 0x9F:	value = 0x5D;	break; // ]
+			case 0x5C:	value = 0x28;	break; // (
+			case 0x5D:	value = 0x29;	break; // )
+			case 0xF0:	value = 0x3A;	break; // :
+			//case 0x9D:	value = 0x3B;	break; // ;
+			//case 0x9E:	value = 0x5B;	break; // [
+			//case 0x9F:	value = 0x5D;	break; // ]
 
-			case 0xE1:  value = 0xBB;	break; // Pk  »
-			case 0xE2:	value = 0xAB;	break; // Mn  «
-			case 0xE3:	value = 0x2D;	break; // -
+			//case 0xE1:	value = 0xBB;	break; // Pk  »
+			//case 0xE2:	value = 0xAB;	break; // Mn  «
+			//case 0xE3:	value = 0x2D;	break; // -
 
-			case 0xE6:	value = 0x3F;	break; // ?
-			case 0xE7:	value = 0x21;	break; // !
-			case 0xE8:	value = 0x2E;	break; // .
+			case 0xAB:	value = 0x3F;	break; // ?
+			case 0xAC:	value = 0x21;	break; // !
+			case 0xAD:	value = 0x2E;	break; // .
 
-			case 0xEF:	value = 0xD8;	break; // male symbol...Ø
+			//case 0xEF:	value = 0xD8;	break; // male symbol...Ø
 
-			case 0xF1:	value = 0xD7;	break; // a small 'x', use 0x2A for %
+			//case 0xF1:	value = 0xD7;	break; // a small 'x', use 0x2A for %
+			//case 0xF3:	value = 0x2F;	break; // /
+			case 0xB8:	value = 0x2C;	break; // ,
+			//case 0xF5:	value = 0xC7;	break; // female symbol...Ç
 
-			case 0xF3:	value = 0x2F;	break; // /
-			case 0xF4:	value = 0x2C;	break; // ,
-			case 0xF5:	value = 0xC7;	break; // female symbol...Ç
-
-			default:	value = 0x20;	break; // print a space otherwise.
+			default:	value = 0x23;	break; // print a # otherwise.
 			}
 		}
 
