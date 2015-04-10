@@ -1031,8 +1031,8 @@ static int hax_read_pokestring_delimited(lua_State *L)
 		}
 
 		if						 (value == 0x50) break;	//break on terminator
-		else if (0x80 <= value && value <= 0x99) value	-=	0x3F; //uppercase
-		else if (0xA0 <= value && value <= 0xB9) value	-=	0x3F; //lowercase
+		else if (0x80 <= value && value <= 0x99) value	-=	0x3F; //uppercase ASCII 0x41-0x5A
+		else if (0xA0 <= value && value <= 0xB9) value	-=	0x3F; //lowercase ASCII 0x61-0x7A
 		else if (0xF6 <= value && value <= 0xFF) value	-=	0xC6; //numeric
 		else
 		{
@@ -1076,6 +1076,86 @@ static int hax_read_pokestring_delimited(lua_State *L)
 
 	return 1;
 }
+
+static int hax_read_pokestring_delimited3(lua_State *L)
+{
+	uint32 address = luaL_checkinteger(L, 1);
+	int	   length = luaL_checkinteger(L, 2);
+
+	// length left as is, to prevent massive overruns.
+	// we use unlikely character values for the non-ASCII
+	// characters present in the game, so they can possibly 
+	// be intercepted and drawn, possibly by voodoo sorcery.
+
+	std::string retstring;
+
+	if (length < 0)
+	{
+		address += length;
+		length = -length;
+	}
+
+	for (int a = address, n = 1; n <= length; a++, n++)
+	{
+		unsigned char value;
+
+		if (systemIsRunningGBA())
+		{
+			value = CPUReadByteQuick(a);
+		}
+		else
+		{
+			value = gbReadMemoryQuick8(a);
+		}
+
+		
+		if (value == 0xFF) break;	//break on terminator
+		else if (0xBB <= value && value <= 0xD4) value -= 0x7A; //uppercase ASCII 0x41-0x5A
+		else if (0xD5 <= value && value <= 0xEE) value -= 0x74; //lowercase ASCII 0x61-0x7A
+		else if (0xA2 <= value && value <= 0xAA) value -= 0x72; //numeric   ASCII 0x30-0x39
+		else
+		{
+			// misc symbols handled thusly...
+			// speak softly and carry a big switch...
+			switch (value)
+			{
+			case 0x00:	value = 0x20;	break; // space
+			case 0x9A:	value = 0x28;	break; // (
+			case 0x9B:	value = 0x29;	break; // )
+			case 0x9C:	value = 0x3A;	break; // :
+			case 0x9D:	value = 0x3B;	break; // ;
+			case 0x9E:	value = 0x5B;	break; // [
+			case 0x9F:	value = 0x5D;	break; // ]
+
+			case 0xE1:  value = 0xBB;	break; // Pk  »
+			case 0xE2:	value = 0xAB;	break; // Mn  «
+			case 0xE3:	value = 0x2D;	break; // -
+
+			case 0xE6:	value = 0x3F;	break; // ?
+			case 0xE7:	value = 0x21;	break; // !
+			case 0xE8:	value = 0x2E;	break; // .
+
+			case 0xEF:	value = 0xD8;	break; // male symbol...Ø
+
+			case 0xF1:	value = 0xD7;	break; // a small 'x', use 0x2A for %
+
+			case 0xF3:	value = 0x2F;	break; // /
+			case 0xF4:	value = 0x2C;	break; // ,
+			case 0xF5:	value = 0xC7;	break; // female symbol...Ç
+
+			default:	value = 0x20;	break; // print a space otherwise.
+			}
+		}
+
+		retstring += value;
+
+	}
+
+	lua_pushstring(L, retstring.c_str());
+
+	return 1;
+}
+
 
 
 static int poke_get_money(lua_State *L)
@@ -5058,6 +5138,7 @@ static const struct luaL_reg haxlib[] = {
 	{ "get_rom_name",   hax_get_rom_name	},
 	{ "read_string",	hax_read_string		},
 	{ "read_pokestring_delimited",	hax_read_pokestring_delimited},
+	{ "read_pokestring_delimited3", hax_read_pokestring_delimited3 },
 	{ "save",			hax_savestate_save	},
 	{ "reset", hax_reset },
 	{ NULL,				NULL				}
@@ -5066,6 +5147,7 @@ static const struct luaL_reg haxlib[] = {
 static const struct luaL_reg pokelib[] = {
 
 	{ "read_pokestring_delimited",  hax_read_pokestring_delimited },
+	{ "read_pokestring_delimited3", hax_read_pokestring_delimited3 },
 	{ "get_money" ,				poke_get_money },			//return money count
 	{ "set_money" ,				poke_set_money },			//return money count
 	{ "get_item_name",			poke_get_item_name},		//return string of item name 
