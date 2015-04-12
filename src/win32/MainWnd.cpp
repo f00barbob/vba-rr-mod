@@ -34,6 +34,12 @@
 #include "../common/link.h"
 
 
+//---------------------- Link
+extern LANLINKDATA lanlink;
+extern int vbaid;
+extern void CloseLanLink(void);
+//---------------------------
+
 #define VBA_CONFIRM_MODE WM_APP + 100
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1317,7 +1323,7 @@ void MainWnd::winFileClose(bool reopening)
 		theApp.emulator.emuCleanUp();
 
 		extern void remoteCleanUp();
-		remoteCleanUp();
+		remoteCleanUp(); //unsure
 	}
 
 	if (VBAMovieIsActive())

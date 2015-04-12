@@ -33,6 +33,15 @@
 #define _stricmp strcasecmp
 #endif
 
+#include "../../common/Link.h"
+
+extern int linktime; // bob
+extern void StartLink(u16); // bob
+extern void StartJOYLink(u16); // bob
+extern void StartGPLink(u16); // bob
+extern void LinkSSend(u16);  // bob
+extern void LinkUpdate(void); // bob
+
 static inline void interp_rate()
 { /* empty for now */ }
 
@@ -3040,7 +3049,7 @@ void CPUUpdateRegister(u32 address, u16 value)
 		cpuNextEvent	 = cpuTotalTicks;
 		break;
 	case 0x128:
-		if (value & 0x80)
+		/*if (value & 0x80)
 		{
 			value &= 0xff7f;
 			if (value & 1 && (value & 0x4000))
@@ -3051,14 +3060,30 @@ void CPUUpdateRegister(u32 address, u16 value)
 				value &= 0x7f7f;
 			}
 		}
-		UPDATE_REG(0x128, value);
+		UPDATE_REG(0x128, value);*/
+		StartLink(value);	// Link, unsure if this placement is relevant
 		break;
+		/* Link
+		------------------------------*/
+	case 0x12a:
+		if (lspeed)
+			LinkSSend(value);
+		UPDATE_REG(0x12a, value);
+		break;
+		/* --------------------------- */
+
 	case 0x130:
 		P1 |= (value & 0x3FF);
 		UPDATE_REG(0x130, P1);
 		break;
 	case 0x132:
 		UPDATE_REG(0x132, value & 0xC3FF);
+		break;
+	case 0x134:
+		StartGPLink(value);
+		break;
+	case 0x140:
+		StartJOYLink(value);
 		break;
 	case 0x200:
 		IE = value & 0x3FFF;
@@ -4190,6 +4215,13 @@ updateLoop:
 #endif
 
 			ticks -= clockTicks;
+
+			/* Link
+			----------------------------------*/
+			linktime += clockTicks;  /// i'm not 100% certain, but i believe this is where this needs to be
+			LinkUpdate();
+			/* ----------------------------- */
+
 			cpuNextEvent = CPUUpdateTicks();
 
 			if (cpuDmaTicksToUpdate > 0)

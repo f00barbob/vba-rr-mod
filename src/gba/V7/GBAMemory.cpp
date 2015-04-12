@@ -76,6 +76,10 @@ u32 CPUReadMemoryWrapped(u32 address)
 		value = READ32LE(((u32 *)&internalRAM[address & 0x7ffC]));
 		break;
 	case 4:
+		/* it looks like this is actually needed only once*/
+		if ((address >= 0x4000120 || address <= 0x4000126) && lspeed)
+		LinkSStop(); 
+		/* mostly due to this cpureadmemorywrapped*/
 		if ((address < 0x4000400) && ioReadable[address & 0x3fc])
 		{
 			if (ioReadable[(address & 0x3fc) + 2])
@@ -215,6 +219,10 @@ u32 CPUReadHalfWordWrapped(u32 address)
 		value = READ16LE(((u16 *)&internalRAM[address & 0x7ffe]));
 		break;
 	case 4:
+		/* it looks like this is actually needed only once*/
+		if ((address >= 0x4000120 || address <= 0x4000126) && lspeed)
+			LinkSStop();
+		/* mostly due to this cpureadmemorywrapped*/
 		if ((address < 0x4000400) && ioReadable[address & 0x3fe])
 		{
 			if (address >= 0x400012f && address <= 0x4000131)
@@ -327,6 +335,10 @@ u8 CPUReadByteWrapped(u32 address)
 	case 3:
 		return internalRAM[address & 0x7fff];
 	case 4:
+		/* it looks like this is actually needed only once*/
+		if ((address >= 0x4000120 || address <= 0x4000126) && lspeed)
+			LinkSStop();
+		/* mostly due to this cpureadmemorywrapped*/
 		if ((address < 0x4000400) && ioReadable[address & 0x3ff])
 		{
 			if (address == 0x4000130 || address == 0x4000131)

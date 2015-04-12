@@ -54,6 +54,18 @@
 
 #include "../common/link.h"
 
+
+/* Link
+---------------------*/
+extern int linklog;
+extern int linktimeout;
+extern int vbaid;
+extern LANLINKDATA lanlink;
+extern lclient lc;
+extern int linkid;
+//extern void CloseLanLink(void);
+/* ---------------- */
+
 extern IDisplay *newGDIDisplay();
 extern IDisplay *newDirectDrawDisplay();
 extern IDisplay *newDirect3DDisplay();
@@ -68,6 +80,16 @@ extern void remoteSetProtocol(int);
 extern void remoteCleanUp();
 
 extern void winlog(const char *msg, ...);
+
+
+/* Link
+---------------------*/
+extern int InitLink(void);
+extern void CloseLink(void);
+//extern int linkid;
+extern char inifile[];
+extern FILE *jjj;
+/* ------------------- */
 
 bool debugger = false;
 
@@ -390,7 +412,7 @@ VBA::VBA() : emulator(::theEmulator)
 	glFilter				= 0;
 	glType					= 0;
 	regEnabled				= false;
-	pauseWhenInactive		= true;
+	pauseWhenInactive		= false; // to avoid bork of link
 	muteWhenInactive		= true;
 	enableBackgroundInput	= false;
 	alwaysOnTop				= false;
@@ -515,6 +537,11 @@ VBA::~VBA()
 	if (rewindMemory)
 		free(rewindMemory);
 
+	/* Link
+	------------------------------------*/
+	CloseLink();
+	/* -------------------------------- */
+
 	if (frameSearchMemory)
 		free(frameSearchMemory);
 
@@ -540,6 +567,26 @@ BOOL VBA::InitInstance()
 //#else
 //  Enable3dControlsStatic();  // Call this when linking to MFC statically
 //#endif
+
+	/* Link
+	--------------------------------------------*/
+
+	/*if((jjj=fopen("vbalink.ini", "rb"))==NULL){
+	lanlink.active = 0;
+	} else {
+	int c = getc(jjj);
+	if(c==0||c==EOF){
+	lanlink.active = 0;
+	} else {
+	lanlink.active = 1;
+	}
+	fclose(jjj);
+	}
+	lanlink.wasactive = lanlink.active;*/
+	if (InitLink() == 0)
+		return false;
+	/* ---------------------------- */
+
 	bool doKillConsole = true;
 	SetRegistryKey(_T("VBA"));
 
@@ -562,6 +609,21 @@ BOOL VBA::InitInstance()
 
 	loadSettings();
 	theApp.LuaFastForward = -1;
+
+
+
+	// Link ----------------------------
+	if (vbaid) linklog = 0;
+	if (linklog){
+		if ((jjj = fopen("vbalog.txt", "wt")) == NULL){
+			return FALSE;
+		}
+		fprintf(jjj, "GBA0 GBA1 GBA2 GBA3 clocks between transfers\n");
+	}
+	//------------------------------
+
+
+
 	if (!initInput())
 		return FALSE;
 
@@ -1151,6 +1213,7 @@ void VBA::updateMenuBar()
 
 void VBA::saveRewindStateIfNecessary()
 {
+	if (lanlink.connected&&linkid&&lc.numtransfers == 0) lc.CheckConn(); //bob
 	if (rewindSaveNeeded && rewindMemory && emulator.emuWriteMemState)
 	{
 		rewindCount++;
@@ -2047,7 +2110,7 @@ void VBA::loadSettings()
 
 	// preferences
 	alwaysOnTop = regQueryDwordValue("alwaysOnTop", false) ? true : false;
-	pauseWhenInactive	  = regQueryDwordValue("pauseWhenInactive", 1) ? true : false;
+	pauseWhenInactive	  = regQueryDwordValue("pauseWhenInactive", false) ? true : false; // also to prevent bork
 	enableBackgroundInput = regQueryDwordValue("enableBackgroundInput", 0) ? true : false;
 	threadPriority		  = regQueryDwordValue("priority", 2);
 	if (threadPriority < 0 || threadPriority > 3)
@@ -2118,6 +2181,16 @@ void VBA::loadSettings()
 			continue;
 		RWAddRecentFile(s);
 	}
+
+
+	//link============================
+	linktimeout = regQueryDwordValue("LinkTimeout", 1000);
+	linklog = regQueryDwordValue("Linklog", false) ? true : false;
+	if (vbaid) linklog = false;
+	lanlink.active = regQueryDwordValue("LAN", 0) ? true : false;
+	//link==============================
+
+
 }
 
 void VBA::saveSettings()
@@ -2281,5 +2354,11 @@ void VBA::saveSettings()
 
 	extern bool autoConvertMovieWhenPlaying;    // from movie.cpp
 	regSetDwordValue("autoConvertMovieWhenPlaying", autoConvertMovieWhenPlaying);
+
+	//link-------------------
+	regSetDwordValue("LinkTimeout", linktimeout);
+	regSetDwordValue("Linklog", linklog);
+	//lkink--------------------
+
 }
 

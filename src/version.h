@@ -20,7 +20,7 @@
 #	define VBA_COMPILER_DETAIL ""
 #endif
 
-#define VBA_NAME "VBA-RR"
+#define VBA_NAME "VBA-RR+link"
 
 #ifdef USE_GBA_CORE_V7
 #	define VBA_RR_MAJOR_VERSION_NO 23
