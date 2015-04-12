@@ -1732,7 +1732,7 @@ BEGIN
         BOTTOMMARGIN, 70
     END
 
-     IDD_LINKTAB, DIALOG
+    IDD_LINKTAB, DIALOG
     BEGIN
         LEFTMARGIN, 7
         TOPMARGIN, 7
@@ -1755,7 +1755,6 @@ BEGIN
         LEFTMARGIN, 7
         TOPMARGIN, 7
     END
-
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -2205,6 +2204,11 @@ BEGIN
                 MENUITEM "&English",                    ID_OPTIONS_LANGUAGE_ENGLISH
                 MENUITEM "&Other...",                   ID_OPTIONS_LANGUAGE_OTHER
             END
+        END
+        POPUP "Link"
+        BEGIN
+            MENUITEM "&Log",                        ID_OPTIONS_LINK_LOG
+            MENUITEM "&Options...",                 ID_OPTIONS_LINK_OPTIONS
         END
     END
     POPUP "&Cheats"

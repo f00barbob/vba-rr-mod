@@ -30,8 +30,11 @@
 #include "../version.h"
 
 #include "../common/link.h"
+#include "../win32/dialogs/linkoptions.h"
 
 #define VBA_CONFIRM_MODE WM_APP + 100
+
+extern FILE *jjj;
 
 void MainWnd::OnOptionsFrameskipThrottleNothrottle()
 {
@@ -2329,3 +2332,29 @@ void MainWnd::OnUpdateOptionsVideoTextdisplayoptions(CCmdUI *pCmdUI)
 	pCmdUI->Enable(TRUE);
 }
 
+
+void MainWnd::OnLinkOptions()
+{
+	LinkOptions dlg;
+
+	dlg.DoModal();
+}
+
+void MainWnd::OnOptionsLinkLog()
+{
+	if (linklog){
+		if (jjj != NULL) fclose(jjj);
+		linklog = 0;
+		jjj = NULL;
+	}
+	else {
+		jjj = fopen("vbalog.txt", "wt");
+		linklog = 1;
+	}
+}
+
+void MainWnd::OnUpdateOptionsLinkLog(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(!vbaid);
+	pCmdUI->SetCheck(linklog);
+}

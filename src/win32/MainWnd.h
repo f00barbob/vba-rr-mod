@@ -540,6 +540,10 @@ protected:
 	afx_msg void OnOptionsVideoTextdisplayoptions();
 	afx_msg void OnUpdateOptionsVideoTextdisplayoptions(CCmdUI *pCmdUI);
 
+	afx_msg void OnLinkOptions(); //link
+	afx_msg void OnOptionsLinkLog(); //link
+	afx_msg void OnUpdateOptionsLinkLog(CCmdUI* pCmdUI); //link
+
 	afx_msg void OnUpdateFileRecentFile(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateFileLoadSlot(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateFileSaveSlot(CCmdUI *pCmdUI);
