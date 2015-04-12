@@ -1112,7 +1112,7 @@ static int hax_read_pokestring_delimited3(lua_State *L)
 		if (value == 0xFF) break;	//break on terminator
 		else if (0xBB <= value && value <= 0xD4) value -= 0x7A; //uppercase ASCII 0x41-0x5A
 		else if (0xD5 <= value && value <= 0xEE) value -= 0x74; //lowercase ASCII 0x61-0x7A
-		else if (0xA2 <= value && value <= 0xAA) value -= 0x72; //numeric   ASCII 0x30-0x39
+		else if (0xA1 <= value && value <= 0xAA) value -= 0x72; //numeric   ASCII 0x30-0x39
 		else
 		{
 			// misc symbols handled thusly...
