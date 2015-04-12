@@ -31,6 +31,9 @@
 #include "../gba/GBAGlobals.h"
 #include "../gb/gbGlobals.h"
 
+#include "../common/link.h"
+
+
 #define VBA_CONFIRM_MODE WM_APP + 100
 
 /////////////////////////////////////////////////////////////////////////////

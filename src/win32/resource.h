@@ -195,6 +195,13 @@
 #define IDS_STARTSOUNDRECORDING         191
 #define IDS_STOPSOUNDRECORDING          192
 #define IDD_DSOUNDCONF                  193
+#define IDD_SERVERWAIT                  195
+#define IDD_LINKTAB1                    196
+#define IDD_LINKTAB2                    197
+#define IDD_LINKTAB3                    198
+#define IDD_LINKTAB                     199
+
+
 #define IDR_MENU                        401
 #define IDR_ACCELERATOR                 405
 #define IDR_GB_PRINTER                  406
@@ -1083,11 +1090,30 @@
 #define IDC_PROMPT_TEXT2                43411
 #define IDC_PROMPT_EDIT                 43412
 
+#define IDC_TAB1 						44000
+#define IDC_LINK_SINGLE    				44001
+#define IDC_LINKTIMEOUT    				44002
+#define IDC_LINK_LAN    				44003
+#define IDC_LINK2P    					44004
+#define IDC_LINKTCP    					44005
+#define IDC_SSPEED    					44006
+#define IDC_SERVERSTART    				44047
+#define IDC_SERVERIP    				44048
+#define IDC_CLINKTCP    				44049
+#define IDC_SPEEDOFF    				44050
+#define IDC_LINKCONNECT    				44051
+#define IDC_SERVERWAIT    				44052
+#define IDC_LINK3P    					44053
+#define IDC_LINK4P    					44054
+#define IDC_CLINKUDP    				44055
+#define IDC_LINKUDP    					44055
+#define IDC_SPEEDON    					44056
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        193
+#define _APS_NEXT_RESOURCE_VALUE        200
 #define _APS_NEXT_COMMAND_VALUE         42465
 #define _APS_NEXT_CONTROL_VALUE         1502
 #define _APS_NEXT_SYMED_VALUE           43513

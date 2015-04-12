@@ -52,6 +52,8 @@
 #include "../filters/filters.h"
 #include "../version.h"
 
+#include "../common/link.h"
+
 extern IDisplay *newGDIDisplay();
 extern IDisplay *newDirectDrawDisplay();
 extern IDisplay *newDirect3DDisplay();
