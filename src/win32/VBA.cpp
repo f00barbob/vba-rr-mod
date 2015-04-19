@@ -671,9 +671,18 @@ BOOL VBA::InitInstance()
 				{
 					if (i + 1 >= argc || argv[i + 1][0] == '-')
 						goto invalidArgument;
-					romFilename = argv[++i];
-					winCorrectPath(romFilename);
-					gameFilename = romFilename;
+					sgmFilename = argv[++i];
+					winCorrectPath(sgmFilename);
+					gameFilename = sgmFilename;
+				}
+				else if (_stricmp(argv[i], "-sgm") == 0)
+				{
+					if (i + 1 >= argc || argv[i + 1][0] == '-')
+						goto invalidArgument;
+					sgmFilename = argv[++i];
+					winCorrectPath(sgmFilename);
+					sgameFilename = sgmFilename;
+
 				}
 				else if (_stricmp(argv[i], "-bios") == 0)
 				{
@@ -872,7 +881,10 @@ invalidArgument:
 		{
 			((MainWnd *)theApp.m_pMainWnd)->winFileRun();
 		}
+
 		free(argv);
+
+
 	}
 	if (doKillConsole)
 	{

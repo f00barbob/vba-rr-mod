@@ -207,7 +207,9 @@ public:
 	struct EmulatedSystem &emulator;
 
 	CString romFilename;
+	CString sgmFilename;
 	CString gameFilename;
+	CString sgameFilename;
 	CString exeName;
 	CString exeDir;
 	CString wndClass;

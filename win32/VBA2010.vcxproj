@@ -645,6 +645,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\common\CheatSearch.cpp" />
+    <ClCompile Include="..\src\common\Link.cpp" />
     <ClCompile Include="..\src\common\lua-engine.cpp" />
     <ClCompile Include="..\src\common\memgzio.c" />
     <ClCompile Include="..\src\common\movie.cpp" />
@@ -678,6 +679,7 @@
     <ClCompile Include="..\src\gba\GBASound.cpp" />
     <ClCompile Include="..\src\gba\Sram.cpp" />
     <ClCompile Include="..\src\win32\Dialogs\DSoundConf.cpp" />
+    <ClCompile Include="..\src\win32\Dialogs\LinkOptions.cpp" />
     <ClCompile Include="lib\libpng\png.c" />
     <ClCompile Include="lib\libpng\pngerror.c" />
     <ClCompile Include="lib\libpng\pnggccrd.c" />
@@ -710,6 +712,7 @@
     <ClCompile Include="lib\zlib\trees.c" />
     <ClCompile Include="lib\zlib\uncompr.c" />
     <ClCompile Include="lib\zlib\zutil.c" />
+    <ClInclude Include="..\src\common\Link.h" />
     <ClInclude Include="..\src\gba\V7\arm-new.h" />
     <ClInclude Include="..\src\gba\V7\GBA-arm.h" />
     <ClInclude Include="..\src\gba\V7\GBA-thumb.h" />
@@ -1132,6 +1135,7 @@
     <ClCompile Include="..\src\win32\7zip\7zip.cpp" />
     <ClCompile Include="..\src\win32\7zip\OpenArchive.cpp" />
     <ClInclude Include="..\src\win32\Dialogs\DSoundConf.h" />
+    <ClInclude Include="..\src\win32\Dialogs\LinkOptions.h" />
     <ClInclude Include="pokeram.h" />
   </ItemGroup>
   <ItemGroup>

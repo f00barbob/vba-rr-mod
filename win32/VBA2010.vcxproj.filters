@@ -666,6 +666,15 @@
     <ClCompile Include="lib\libpng\pngrutil.c">
       <Filter>Source Files\libpng</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\win32\Dialogs\DSoundConf.cpp">
+      <Filter>Source Files\Win32\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common\Link.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\win32\Dialogs\LinkOptions.cpp">
+      <Filter>Source Files\Win32\Dialogs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\win32\gbadvance.ico">
@@ -1185,6 +1194,15 @@
       <Filter>Source Files\GBA\V7</Filter>
     </ClInclude>
     <ClInclude Include="pokeram.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\win32\Dialogs\DSoundConf.h">
+      <Filter>Header Files\Win32\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\win32\Dialogs\LinkOptions.h">
+      <Filter>Header Files\Win32\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common\Link.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
