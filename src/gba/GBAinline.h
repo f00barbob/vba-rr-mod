@@ -7,7 +7,7 @@
 
 #include "../Port.h"
 
-extern int lspeed; //bob
+extern int lspeed; //bob/
 extern void LinkSStop(void); //bob
 
 // moved from GBA.h
