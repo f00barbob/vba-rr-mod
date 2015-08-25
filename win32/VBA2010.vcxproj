@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Template|x64">
       <Configuration>Template</Configuration>
@@ -53,25 +53,25 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='V82XD|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='V72XD|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='V72XD|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>Static</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='V82XR|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -85,7 +85,7 @@
     <UseOfMfc>Static</UseOfMfc>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='V72XR|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -108,20 +108,20 @@
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='V72XR|Win32'">
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <UseOfMfc>Static</UseOfMfc>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='V72XR|x64'" Label="Configuration">
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <UseOfMfc>Static</UseOfMfc>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Template|x64'" Label="Configuration">
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
