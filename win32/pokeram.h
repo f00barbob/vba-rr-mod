@@ -59,10 +59,16 @@ void init_rammap()
 	pokeram.time.frames =	0xDA45;
 	
 	
-	
-	pokeram.items.count = 0xD31D;
+// gen 1	
+	/*pokeram.items.count = 0xD31D;
 	pokeram.items.item_base = 0xD31E;
 	pokeram.items.qty_base = 0xD31F;
+	pokeram.items.end = 0xD346;*/
+
+// gen 2
+	pokeram.items.count = 0xD8D7;
+	pokeram.items.item_base = 0xD8D8;
+	pokeram.items.qty_base = 0xD8D9;
 	pokeram.items.end = 0xD346;
 
 	pokeram.pc_items.count = 0xD53A;
@@ -70,7 +76,7 @@ void init_rammap()
 	pokeram.pc_items.qty_base = 0xD53C;
 	pokeram.pc_items.end = 0xD59F;
 	
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 12; i++) // edited for ball-bag on crystal
 	{
 		pokeram.items.item[i] = pokeram.items.item_base + 2 * i;
 		pokeram.items.qty[i] = pokeram.items.qty_base + 2 * i;
