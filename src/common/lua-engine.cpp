@@ -1207,6 +1207,32 @@ static int poke_set_money(lua_State *L)
 	return 0;
 }
 
+static int poke_set_money2(lua_State *L)
+{
+	u32 newmoney = luaL_checkinteger(L, 1);
+	 
+	printf("Setting money: %i", newmoney);
+
+	gbWriteMemoryQuick8(0xD84E,(newmoney >> 16) & 0xff);
+	gbWriteMemoryQuick8(0xD84F,(newmoney >> 8) & 0xff);
+	gbWriteMemoryQuick8(0xD850,(newmoney >> 0) & 0xff);
+	return 0;
+}
+
+static int poke_get_money2(lua_State *L)
+{
+	int money1 = gbReadMemoryQuick8(0xD84E) * 65536;
+	int money2 = gbReadMemoryQuick8(0xD84F) * 256;
+	int money3 = gbReadMemoryQuick8(0xD850);
+
+	u32 money = money1 + money2 + money3;
+
+	printf("Read money as: %i", money);
+
+	lua_pushinteger(L, money);
+	return 1;
+}
+
 static int poke_get_item_name(lua_State *L)
 {
 	int bag_index = luaL_checkinteger(L, 1);
@@ -1249,7 +1275,7 @@ static int poke_add_bag_item(lua_State *L)
 	printf("qty 0 address: 0x%04x", pokeram.items.qty[0]);
 
 	printf("Trying to add bag item...\n");
-	if (bag_count < 20)
+	if (bag_count < 12) // for crystal balls
 	{
 		printf("We have space, incrementing bag count, adding FF\n");
 		gbWriteMemoryQuick8(pokeram.items.count, bag_count + 1); // update bag size
@@ -5149,6 +5175,8 @@ static const struct luaL_reg pokelib[] = {
 	{ "read_pokestring_delimited3", hax_read_pokestring_delimited3 },
 	{ "get_money" ,				poke_get_money },			//return money count
 	{ "set_money" ,				poke_set_money },			//return money count
+	{ "get_money2",				poke_get_money2 },			//return money count (gen 2)
+	{ "set_money2",				poke_set_money2 },			//return money count (gen 2)
 	{ "get_item_name",			poke_get_item_name},		//return string of item name 
 	{ "get_bag_item",				poke_get_bag_item},			//return int of item value
 	{ "set_bag_item",				poke_set_bag_item },		//sets bag item value
